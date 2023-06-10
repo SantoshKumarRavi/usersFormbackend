@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,HttpException, HttpStatus, } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../schema/User.schema';
@@ -21,7 +21,7 @@ export class FormService {
   async getFormByUsername(username: string): Promise<any> {
     const fetched = await this.formModel.findOne({ username }).exec();
     if (!fetched) {
-      return 'No user is present';
+      throw new HttpException('No user is present', HttpStatus.NOT_FOUND);
     }
     return fetched;
   }
@@ -35,7 +35,7 @@ export class FormService {
       },
     );
     if (!updated) {
-      return 'No user is present';
+      throw new HttpException('No user is present', HttpStatus.NOT_FOUND);
     }
     return updated;
   }
